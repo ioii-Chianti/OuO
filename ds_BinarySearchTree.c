@@ -1,23 +1,23 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct _Node {
+typedef struct _BTNode {
     int data;
-    struct _Node *left;
-    struct _Node *right;
-} Node;
+    struct _BTNode *left;
+    struct _BTNode *right;
+} BTNode;
 
-Node *Root;
+BTNode *Root;
 
-Node *newNode(int value) {
-    Node *node = (Node *)malloc(sizeof(Node));
+BTNode *newNode(int value) {
+    BTNode *node = (BTNode *)malloc(sizeof(BTNode));
     node->data = value;
     node->left = node->right = NULL;
     return node;
 }
 
 void insertion(int value) {
-    Node *pre = NULL, *cur = Root;
+    BTNode *pre = NULL, *cur = Root;
     while (cur) {
         pre = cur;
         cur = value < cur->data ? cur->left : cur->right;
@@ -28,10 +28,10 @@ void insertion(int value) {
         pre->right = newNode(value);
 }
 
-void inOrder(Node *root) {
+void inOrder(BTNode *root) {
     if (root == NULL)
         return;
-    Node *node = root;
+    BTNode *node = root;
     inOrder(node->left);
     printf("%d ", root->data);
     inOrder(node->right);
