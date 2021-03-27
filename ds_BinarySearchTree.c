@@ -29,12 +29,12 @@ void insertion(int value) {
 }
 
 void inOrder(BTNode *root) {
-    if (root == NULL)
-        return;
-    BTNode *node = root;
-    inOrder(node->left);
-    printf("%d ", root->data);
-    inOrder(node->right);
+    if (root) {
+        BTNode *node = root;
+        inOrder(node->left);
+        printf("%d ", root->data);
+        inOrder(node->right);
+    }
 }
 
 int main() {
