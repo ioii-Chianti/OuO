@@ -2,10 +2,9 @@
 #include <string.h>
 #include <stdlib.h>
 #define MAXEXPR 260
-#define MAXSYM 6     // operators + oprands
 
-char expr[MAXEXPR];  // input expression
-int pos;             // current position of parsing
+/* Build by infix: EXPR + FAC 
+   Build by prefix: newTree */
 
 typedef struct _BTNode {
     char data;
@@ -13,6 +12,8 @@ typedef struct _BTNode {
     struct _BTNode *right;
 } BTNode;
 
+char expr[MAXEXPR];  // input expression
+int pos;             // current position of parsing
 BTNode *Expression();
 BTNode *Factor();
 
@@ -21,6 +22,22 @@ BTNode *newNode(char ch) {
     node->data = ch;
     node->left = node->right = NULL;
     return node;
+}
+
+// Build a tree by prefix
+BTNode *newTree(BTNode *root) {
+    char input;
+    scanf("%c", &input);
+
+    if (input == '&' || input == '|') {
+        BTNode *node = newNode(input);
+        node->left = newTree(node->left);
+        node->right = newTree(node->right);
+        return node;
+    } else {
+        BTNode *node = newNode(input);
+        return node;
+    }
 }
 
 BTNode *Expression() {
@@ -63,13 +80,37 @@ BTNode *Factor() {
         else if (ch == ')') {
             node = Expression();
 
-            if (expr[pos--] != '(') {
+            if (expr[pos--] != '(')
                 printf("Error!\n");
-                freeTree(node);
-            }   // 處理完應為左括號
+                // 處理完應為左括號
         }
     }
     return node;
+}
+
+// prefix taversal
+void preOrder(BTNode *root) {
+    if (root) {
+        printf("%d ", root->data);
+        preOrder(root->left);
+        preOrder(root->right);
+    }
+}
+
+// infix traversal w/ necessary parentheses
+void inOrder(BTNode *root) {
+    if (root) {
+        inOrder(root->left);
+        printf("%c", root->data);
+        if (root->right) {   // 是運算子的話則需要印括號再進去遞迴子樹
+            if (root->right->data == '&' || root->right->data == '|') {
+                printf("(");
+                inOrder(root->right);
+                printf(")");
+            } else
+                inOrder(root->right);
+        }
+    }
 }
 
 int main() {
