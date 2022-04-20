@@ -22,7 +22,7 @@ void insertNode(int value) {
     BTNode *pre = NULL, *cur = Root;
     while (cur) {
         pre = cur;
-        cur = value < cur->data ? cur->left : cur->right;
+        cur = (value < cur->data) ? cur->left : cur->right;
     }
     if (value < pre->data)
         pre->left = newNode(value);
@@ -40,7 +40,7 @@ void insertNode_Rec(BTNode **root, int value, int level) {
         // sums[level] += value;
         // nodes[level]++;
     }
-    // find a right position for new node recursively, level increases sue to every recursion
+    // find a right position for new node recursively, level increases due to every recursion
     else {
         if (value < (*root)->data)
             return insertNode_Rec(&((*root)->left), value, level + 1);
